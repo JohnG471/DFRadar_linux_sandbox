@@ -11,13 +11,18 @@
 #ifndef __DFROBOT_C4001_H__
 #define __DFROBOT_C4001_H__
 
-#include <Arduino.h>
-#include <Wire.h>
+//#include <Arduino.h>
+// #include <Wire.h>
+#include <stdint.h> //Required for uint8_t
+#include <string> //Required for string
+using std::string;
+
+#include <libserial>
 
 #if defined(ARDUINO_AVR_UNO) || defined(ESP8266)
-#include "SoftwareSerial.h"
+// #include "SoftwareSerial.h"
 #else
-#include "HardwareSerial.h"
+// #include "HardwareSerial.h"
 
 #endif
 
@@ -404,8 +409,8 @@ public:
    */
   eSwitch_t getFrettingDetection(void);
 protected:
-  sResponseData_t wRCMD(String cmd1, uint8_t count);
-  void writeCMD(String cmd1 , String cmd2, uint8_t count);
+  sResponseData_t wRCMD(string cmd1, uint8_t count);
+  void writeCMD(string cmd1 , string cmd2, uint8_t count);
   sAllData_t anaysisData(uint8_t * data, uint8_t len);
   sResponseData_t anaysisResponse(uint8_t *data, uint8_t len ,uint8_t count);
   bool sensorStop(void);
@@ -415,19 +420,6 @@ private:
   sPrivateData_t _buffer;
   virtual void writeReg(uint8_t reg, uint8_t *data, uint8_t len) = 0;
   virtual int16_t readReg(uint8_t reg, uint8_t *data, uint8_t len) = 0;
-};
-
-class DFRobot_C4001_I2C:public DFRobot_C4001{
-public:
-  DFRobot_C4001_I2C(TwoWire *pWire=&Wire, uint8_t addr = DEVICE_ADDR_0);
-  bool begin(void);
-protected:
-  virtual void writeReg(uint8_t reg, uint8_t *data, uint8_t len);
-  virtual int16_t readReg(uint8_t reg, uint8_t *data, uint8_t len);
-private:
-  TwoWire *_pWire;
-  uint8_t _I2C_addr;
-
 };
 
 class DFRobot_C4001_UART:public DFRobot_C4001{

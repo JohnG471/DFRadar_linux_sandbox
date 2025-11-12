@@ -660,7 +660,7 @@ sAllData_t DFRobot_C4001::anaysisData(uint8_t * data, uint8_t len) //data is an 
     return allData;
   }
 
-  if(0 == strncmp((const char *)(data+location), "$DFHPD", strlen("$DFHPD"))){ //Checks if $DFGHPD is in data
+  if(0 == strncmp((const char *)(data+location), "$DFHPD", strlen("$DFHPD"))){ //Checks if $DFGHPD is in data //HPD = Human presence detection
     allData.sta.workMode = eExitMode; //Exit mode vs speed mode. Speed mode detects object velocity, exit mode detects if there is object
     allData.sta.workStatus = 1;
     allData.sta.initStatus = 1;
@@ -675,15 +675,15 @@ sAllData_t DFRobot_C4001::anaysisData(uint8_t * data, uint8_t len) //data is an 
     allData.sta.workStatus = 1;
     allData.sta.initStatus = 1;
     char *token;
-    char *parts[10]; // Let's say there are at most 10 parts
+    char *parts[10]; // Let's say there are at most 10 parts //???
     int index = 0;   // Used to track the number of parts stored
-    token = strtok((char*)(data+location), ",");
+    token = strtok((char*)(data+location), ","); //splits data into pointers to tokens split from data using ,
     while (token != NULL) {
       parts[index] = token; // Stores partial Pointers in an array
       if(index++ > 8){
         break;
       }
-      token = strtok(NULL, ","); // Continue to extract the next section
+      token = strtok(NULL, ","); // Continue to extract the next section 
     }
     allData.target.number = atoi(parts[1]);
     allData.target.range = atof(parts[3]) * 100;
