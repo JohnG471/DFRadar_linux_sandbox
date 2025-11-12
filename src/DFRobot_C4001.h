@@ -11,20 +11,11 @@
 #ifndef __DFROBOT_C4001_H__
 #define __DFROBOT_C4001_H__
 
-//#include <Arduino.h>
-// #include <Wire.h>
 #include <stdint.h> //Required for uint8_t
 #include <string> //Required for string
 using std::string;
 
 #include <libserial>
-
-#if defined(ARDUINO_AVR_UNO) || defined(ESP8266)
-// #include "SoftwareSerial.h"
-#else
-// #include "HardwareSerial.h"
-
-#endif
 
 /**
  * @struct sSensorStatus_t
@@ -424,25 +415,14 @@ private:
 
 class DFRobot_C4001_UART:public DFRobot_C4001{
 public:
-#if defined(ARDUINO_AVR_UNO) || defined(ESP8266)
-  DFRobot_C4001_UART(SoftwareSerial *sSerial, uint32_t Baud);
-#else
   DFRobot_C4001_UART(HardwareSerial *hSerial, uint32_t Baud ,uint8_t rxpin = 0, uint8_t txpin = 0);
-#endif
-
   bool begin(void);
 protected:
   virtual void writeReg(uint8_t reg, uint8_t *data, uint8_t len);
   virtual int16_t readReg(uint8_t reg, uint8_t *data, uint8_t len);
 private:
-
-#if defined(ARDUINO_AVR_UNO) || defined(ESP8266)
-  SoftwareSerial *_serial;
-#else
   HardwareSerial *_serial;
-#endif
   uint32_t _baud;
   uint8_t _rxpin;
   uint8_t _txpin;
 };
-#endif
