@@ -156,7 +156,7 @@ public:
 
   DFRobot_C4001();
   ~DFRobot_C4001();
-  uint8_t  uartI2CFlag = 0;
+
   /**
    * @fn motionDetection
    * @brief motion Detection
