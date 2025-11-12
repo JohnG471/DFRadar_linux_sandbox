@@ -746,25 +746,15 @@ bool DFRobot_C4001::sensorStop(void)
     
   }
 }
-zz
-#if defined(ARDUINO_AVR_UNO) || defined(ESP8266)
-  DFRobot_C4001_UART::DFRobot_C4001_UART(SoftwareSerial *sSerial, uint32_t Baud)
-  {
-    this->_serial = sSerial;
-    this->_baud = Baud;
-    uartI2CFlag = UART_FLAG;
-    //_serial->begin(this->_baud);
-  }
-#else
-  DFRobot_C4001_UART::DFRobot_C4001_UART(HardwareSerial *hSerial, uint32_t Baud ,uint8_t txpin, uint8_t rxpin)
-  {
-    this->_serial = hSerial;
-    this->_baud = Baud;
-    uartI2CFlag = UART_FLAG;
-    this->_txpin = txpin;
-    this->_rxpin = rxpin;
-  }
-#endif
+
+DFRobot_C4001_UART::DFRobot_C4001_UART(HardwareSerial *hSerial, uint32_t Baud ,uint8_t txpin, uint8_t rxpin)
+{
+  this->_serial = hSerial;
+  this->_baud = Baud;
+  uartI2CFlag = UART_FLAG;
+  this->_txpin = txpin;
+  this->_rxpin = rxpin;
+}
 
 bool DFRobot_C4001_UART::begin()
 {
