@@ -11,11 +11,22 @@
 #ifndef __DFROBOT_C4001_H__
 #define __DFROBOT_C4001_H__
 
-#include <stdint.h> //Required for uint8_t
-#include <string> //Required for string
+#include <stdint.h>
+#include <stdio.h>
+#include <cstring>
+#include <string>
+#include <chrono>
+#include <thread>
+
+// Linux headers
+#include <fcntl.h> // Contains file controls like O_RDWR
+#include <errno.h> // Error integer and strerror() function
+#include <termios.h> // Contains POSIX terminal control definitions
+#include <unistd.h> // write(), read(), close()
+
 using std::string;
 
-#include <libserial>
+#endif
 
 /**
  * @struct sSensorStatus_t
@@ -107,7 +118,7 @@ class DFRobot_C4001{
 public:
 #define DEVICE_ADDR_0   0x2A
 #define DEVICE_ADDR_1   0x2B
-#define TIME_OUT        0x64     ///< time out
+#define TIME_OUT        0x64     ///< time out 100
 #define I2C_FLAG        0x01
 #define UART_FLAG       0x02
 
@@ -399,6 +410,9 @@ public:
    * @return eSwitch_t 
    */
   eSwitch_t getFrettingDetection(void);
+
+  void sleepForMillis(int);
+
 protected:
   sResponseData_t wRCMD(string cmd1, uint8_t count);
   void writeCMD(string cmd1 , string cmd2, uint8_t count);
@@ -415,13 +429,13 @@ private:
 
 class DFRobot_C4001_UART:public DFRobot_C4001{
 public:
-  DFRobot_C4001_UART(HardwareSerial *hSerial, uint32_t Baud ,uint8_t rxpin = 0, uint8_t txpin = 0);
+  DFRobot_C4001_UART(int port, uint32_t Baud ,uint8_t rxpin = 0, uint8_t txpin = 0);
   bool begin(void);
 protected:
   virtual void writeReg(uint8_t reg, uint8_t *data, uint8_t len);
   virtual int16_t readReg(uint8_t reg, uint8_t *data, uint8_t len);
 private:
-  HardwareSerial *_serial;
+  int serial_port;
   uint32_t _baud;
   uint8_t _rxpin;
   uint8_t _txpin;

@@ -44,7 +44,7 @@ void setup()
   while(!Serial);
   while(!radar.begin()){
     Serial.println("NO Deivces !");
-    delay(1000);
+    sleepForMillis(1000);
   }
   Serial.println("Device connected!");
 
@@ -104,5 +104,5 @@ void loop()
   Serial.print("target energy  = ");
   Serial.println(radar.getTargetEnergy());
   Serial.println();
-  delay(100);
+  sleepForMillis(100);
 }
