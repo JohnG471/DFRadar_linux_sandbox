@@ -601,17 +601,26 @@ void DFRobot_C4001_UART::writeReg(uint8_t reg, uint8_t *data, uint8_t len)
   len = reg;
 }
 
+int serialAvailable(int port) {
+    int bytes = 0;
+    ioctl(port, FIONREAD, &bytes);
+    return bytes;
+}
+
 int16_t DFRobot_C4001_UART::readReg(uint8_t reg, uint8_t *data, uint8_t len)
 {
   uint16_t i = 0;
   auto nowtime = std::chrono::system_clock::now();
   while(static_cast<uint32_t>(std::chrono::duration_cast<std::chrono::milliseconds>(
     std::chrono::system_clock::now() - nowtime).count()) < TIME_OUT){
-    while(_serial->available() > 0){
+    
+    while(true){
       if(i == len) return len;
-      unsigned char read_buf;
-      read(this->serial_port, &read_buf, 1);
-      data[i++] = (int)read_buf;
+      int bytes = serialAvailable(this->serial_port);
+      if (bytes > 0) {
+        unsigned char read_buf;
+        data[i++] = (int)read(this->serial_port, &read_buf, 1);
+      }
     }
   }
   len = reg;

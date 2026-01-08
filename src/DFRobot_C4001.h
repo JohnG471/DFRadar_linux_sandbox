@@ -23,6 +23,7 @@
 #include <errno.h> // Error integer and strerror() function
 #include <termios.h> // Contains POSIX terminal control definitions
 #include <unistd.h> // write(), read(), close()
+#include <sys/ioctl.h>
 
 using std::string;
 
@@ -412,6 +413,8 @@ public:
   eSwitch_t getFrettingDetection(void);
 
   void sleepForMillis(int);
+
+  int serialAvailable(int);
 
 protected:
   sResponseData_t wRCMD(string cmd1, uint8_t count);
