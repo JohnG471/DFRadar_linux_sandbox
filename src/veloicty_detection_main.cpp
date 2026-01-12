@@ -3,14 +3,14 @@
 int main()
 {
   /* -----------------------------
-   *  Open UART device
-   *  Change if needed:
-   *    /dev/ttyUSB0
-   *    /dev/ttyUSB1
-   *    /dev/ttyS0
-   * ----------------------------- */
+  *  Open UART device
+  *  Change if needed:
+  *    /dev/ttyUSB0
+  *    /dev/ttyUSB1
+  *    /dev/ttyS0
+  * ----------------------------- */
   int serial_port = open("/dev/ttyTODO", O_RDWR);
-  
+
   if (serial_port < 0) {
     perror("Failed to open serial port");
     return -1;
@@ -27,7 +27,6 @@ int main()
 
   // speed Mode
   radar.setSensorMode(eSpeedMode);
-
   sSensorStatus_t data = radar.getStatus();
 
   //  0 stop  1 start
@@ -39,10 +38,10 @@ int main()
   std::cout << std::endl;
 
   /*
-   * min Detection range Minimum distance, unit cm, range 0.3~20m (30~2000), not exceeding max, otherwise the function is abnormal.
-   * max Detection range Maximum distance, unit cm, range 2.4~20m (240~2000)
-   * thres Target detection threshold, dimensionless unit 0.1, range 0~6553.5 (0~65535)
-   */
+  * min Detection range Minimum distance, unit cm, range 0.3~20m (30~2000), not exceeding max, otherwise the function is abnormal.
+  * max Detection range Maximum distance, unit cm, range 2.4~20m (240~2000)
+  * thres Target detection threshold, dimensionless unit 0.1, range 0~6553.5 (0~65535)
+  */
   if (radar.setDetectThres(/*min*/11, /*max*/1200, /*thres*/10)) {
     std::cout << "Set detect threshold successfully" << std::endl;
   }
@@ -59,8 +58,8 @@ int main()
   std::cout << std::endl;
 
   /* -----------------------------
-   *  Main loop
-   * ----------------------------- */
+  *  Main loop
+  * ----------------------------- */
   while (true) {
     std::cout << "target number = " << (int)radar.getTargetNumber() << std::endl;
 
