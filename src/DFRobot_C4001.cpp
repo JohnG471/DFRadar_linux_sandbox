@@ -42,7 +42,8 @@ bool DFRobot_C4001::motionDetection(void)
   len = readReg(0, temp, 100);
   data = anaysisData(temp ,len);
   if(data.exist){
-    old = (bool)status;
+    //old = (bool)status;
+    old = (bool)data.exist;
     return (bool)data.exist;
   }else{
     return (bool)old;
@@ -537,7 +538,7 @@ bool DFRobot_C4001::sensorStop(void)
   }
 }
 
-DFRobot_C4001_UART::DFRobot_C4001_UART(int port, uint32_t Baud ,uint8_t txpin, uint8_t rxpin)
+DFRobot_C4001_UART::DFRobot_C4001_UART(int port, uint32_t Baud ,uint8_t rxpin, uint8_t txpin)
 {
   this->serial_port = port;
   this->_baud = Baud;
