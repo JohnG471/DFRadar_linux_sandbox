@@ -237,7 +237,7 @@ uint16_t DFRobot_C4001::getMinRange(void)
 uint8_t DFRobot_C4001::getTargetNumber(void)
 {
   static uint8_t flash_number = 0;
-  uint8_t temp[10] = {0};
+  // uint8_t temp[10] = {0};
   uint8_t len = 0;
   uint8_t temp[100] = {0};
   sAllData_t data;
