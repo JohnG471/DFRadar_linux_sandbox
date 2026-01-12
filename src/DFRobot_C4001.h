@@ -28,8 +28,6 @@
 
 using std::string;
 
-#endif
-
 /**
  * @struct sSensorStatus_t
  * @brief sensor status
@@ -413,16 +411,17 @@ public:
    */
   eSwitch_t getFrettingDetection(void);
 
-  void sleepForMillis(int);
-
-  int serialAvailable(int);
-
 protected:
   sResponseData_t wRCMD(string cmd1, uint8_t count);
   void writeCMD(string cmd1 , string cmd2, uint8_t count);
   sAllData_t anaysisData(uint8_t * data, uint8_t len);
   sResponseData_t anaysisResponse(uint8_t *data, uint8_t len ,uint8_t count);
   bool sensorStop(void);
+  
+  void sleepForMillis(int);
+  
+  int serialAvailable(int);
+  
 private:
   uint8_t  _addr;
   uint8_t  _M_Flag = 0;
@@ -444,3 +443,5 @@ private:
   uint8_t _rxpin;
   uint8_t _txpin;
 };
+
+#endif
