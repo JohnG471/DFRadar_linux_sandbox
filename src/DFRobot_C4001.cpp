@@ -602,7 +602,7 @@ void DFRobot_C4001_UART::writeReg(uint8_t reg, uint8_t *data, uint8_t len)
   len = reg;
 }
 
-int serialAvailable(int port) {
+int DFRobot_C4001::serialAvailable(int port) {
     int bytes = 0;
     ioctl(port, FIONREAD, &bytes);
     return bytes;
@@ -629,6 +629,6 @@ int16_t DFRobot_C4001_UART::readReg(uint8_t reg, uint8_t *data, uint8_t len)
   return i;
 }
 
-void sleepForMillis(int time){
+void DFRobot_C4001::sleepForMillis(int time){
   std::this_thread::sleep_for(std::chrono::milliseconds(time));
 }

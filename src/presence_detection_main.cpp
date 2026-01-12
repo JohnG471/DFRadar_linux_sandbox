@@ -13,7 +13,7 @@ int main()
 
     while (!radar.begin()) {
         std::cout << "NO Devices !" << std::endl;
-        sleepForMillis(1000);
+        radar.sleepForMillis(1000);
     }
 
     std::cout << "Device connected!" << std::endl;
