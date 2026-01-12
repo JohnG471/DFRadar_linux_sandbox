@@ -1,32 +1,80 @@
 #include "DFRobot_C4001.h"
 
-int main() {
-  // Open the serial port. Change device path as needed (currently set to an standard FTDI USB-UART cable type device)
+int main()
+{
+  /* -----------------------------
+   *  Open UART device
+   *  Change if needed:
+   *    /dev/ttyUSB0
+   *    /dev/ttyUSB1
+   *    /dev/ttyS0
+   * ----------------------------- */
   int serial_port = open("/dev/ttyTODO", O_RDWR);
-
-  // Allocate memory for read buffer, set size according to your needs
-  char read_buf [256];
-
-  // Normally you wouldn't do this memset() call, but since we will just receive
-  // ASCII data for this example, we'll set everything to 0 so we can
-  // call printf() easily.
-  memset(&read_buf, '\0', sizeof(read_buf));
-
-  // Read bytes. The behaviour of read() (e.g. does it block?,
-  // how long does it block for?) depends on the configuration
-  // settings above, specifically VMIN and VTIME
-  int num_bytes = read(serial_port, &read_buf, sizeof(read_buf));
-
-  // n is the number of bytes read. n may be 0 if no bytes were received, and can also be -1 to signal an error.
-  if (num_bytes < 0) {
-      printf("Error reading: %s", strerror(errno));
-      return 1;
+  
+  if (serial_port < 0) {
+    perror("Failed to open serial port");
+    return -1;
   }
 
-  // Here we assume we received ASCII data, but you might be sending raw bytes (in that case, don't try and
-  // print it to the screen like this!)
-  printf("Read %i bytes. Received message: %s", num_bytes, read_buf);
+  DFRobot_C4001_UART radar(serial_port, B9600);
+
+  while (!radar.begin()) {
+    std::cout << "NO Devices !" << std::endl;
+    sleepForMillis(1000);
+  }
+
+  std::cout << "Device connected!" << std::endl;
+
+  // speed Mode
+  radar.setSensorMode(eSpeedMode);
+
+  sSensorStatus_t data = radar.getStatus();
+
+  //  0 stop  1 start
+  std::cout << "work status  = " << (int)data.workStatus << std::endl;
+  //  0 is exist   1 speed
+  std::cout << "work mode    = " << (int)data.workMode << std::endl;
+  //  0 no init    1 init success
+  std::cout << "init status  = " << (int)data.initStatus << std::endl;
+  std::cout << std::endl;
+
+  /*
+   * min Detection range Minimum distance, unit cm, range 0.3~20m (30~2000), not exceeding max, otherwise the function is abnormal.
+   * max Detection range Maximum distance, unit cm, range 2.4~20m (240~2000)
+   * thres Target detection threshold, dimensionless unit 0.1, range 0~6553.5 (0~65535)
+   */
+  if (radar.setDetectThres(/*min*/11, /*max*/1200, /*thres*/10)) {
+    std::cout << "Set detect threshold successfully" << std::endl;
+  }
+
+  // set Fretting Detection
+  radar.setFrettingDetection(eON);
+
+  // get confige params
+  std::cout << "min range = " << radar.getTMinRange() << std::endl;
+  std::cout << "max range = " << radar.getTMaxRange() << std::endl;
+  std::cout << "threshold range = " << radar.getThresRange() << std::endl;
+  std::cout << "fretting detection = " << radar.getFrettingDetection() << std::endl;
+
+  std::cout << std::endl;
+
+  /* -----------------------------
+   *  Main loop
+   * ----------------------------- */
+  while (true) {
+    std::cout << "target number = " << (int)radar.getTargetNumber() << std::endl;
+
+    std::cout << "target speed  = " << radar.getTargetSpeed() << " m/s" << std::endl;
+
+    std::cout << "target range  = " << radar.getTargetRange() << " m" << std::endl;
+
+    std::cout << "target energy = " << radar.getTargetEnergy() << std::endl;
+
+    std::cout << "-----------------------------" << std::endl;
+
+    sleepForMillis(100);
+  }
 
   close(serial_port);
-  return 0; // success
-};
+  return 0;
+}
